@@ -1,39 +1,41 @@
 logs = [
-    ["B101", "Anu", "BORROW", "2025-03-10"],
-    ["B101", "Anu", "BORROW", "2025-03-10"],
-    ["B102", "Bala", "RETURN", "2025-03-10"],
-    ["B101", "Anu", "RETURN", "2025-03-10"],
-    ["B103", "Chitra", "BORROW", "2025-03-11"]
+    ["S101", "Asha", "LOGIN", "2025-03-10"],
+    ["S101", "Asha", "LOGIN", "2025-03-10"],
+    ["S102", "Ravi", "SUBMIT", "2025-03-10"],
+    ["S101", "Asha", "LOGOUT", "2025-03-10"],
+    ["S103", "Meena", "LOGIN", "2025-03-11"]
 ]
 
-book_counts = {}
-borrow_status = {}
-daily_counts = {}
+student_counts = {}
+login_status = {}     
+daily_counts = {}     
 
 for log in logs:
-    bid, name, action, date = log
+    sid, name, activity, date = log
 
-    if bid not in book_counts:
-        book_counts[bid] = {"name": name, "BORROW": 0, "RETURN": 0}
+    if sid not in student_counts:
+        student_counts[sid] = {"name": name, "LOGIN": 0, "SUBMIT": 0}
 
-    if action == "BORROW":
-        book_counts[bid]["BORROW"] += 1
-        borrow_status[bid] = borrow_status.get(bid, 0) + 1
-    elif action == "RETURN":
-        book_counts[bid]["RETURN"] += 1
-        borrow_status[bid] = max(borrow_status.get(bid, 0) - 1, 0)
+    if activity == "LOGIN":
+        student_counts[sid]["LOGIN"] += 1
+        login_status[sid] = login_status.get(sid, 0) + 1
+    elif activity == "SUBMIT":
+        student_counts[sid]["SUBMIT"] += 1
+    elif activity == "LOGOUT":
+        login_status[sid] = max(login_status.get(sid, 0) - 1, 0)
 
     daily_counts[date] = daily_counts.get(date, 0) + 1
 
-print("LIBRARY ACTIVITY REPORT\n")
-for bid, data in book_counts.items():
-    print(f"{bid} | {data['name']} | Borrowed: {data['BORROW']} | Returned: {data['RETURN']}")
+print("STUDENT ACTIVITY REPORT\n")
+for sid, data in student_counts.items():
+    print(f"{sid} | {data['name']} | Logins: {data['LOGIN']} | Submissions: {data['SUBMIT']}")
 
-print("\nBOOK NOT RETURNED REPORT")
-for bid, count in borrow_status.items():
+print("\nABNORMAL BEHAVIOR REPORT")
+for sid, count in login_status.items():
     if count > 0:
-        print(f"{bid} has books not returned")
+        print(f"{sid} has multiple logins without logout")
 
-print("\nDAILY LIBRARY STATISTICS")
+print("\nDAILY ACTIVITY STATISTICS")
 for date, count in daily_counts.items():
     print(f"{date}: {count} activities")
+
