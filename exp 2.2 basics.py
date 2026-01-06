@@ -37,3 +37,4 @@ for bid, count in borrow_status.items():
 print("\nDAILY LIBRARY STATISTICS")
 for date, count in daily_counts.items():
     print(f"{date}: {count} activities")
+
